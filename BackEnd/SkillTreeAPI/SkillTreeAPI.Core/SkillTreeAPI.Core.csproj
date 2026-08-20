@@ -19,12 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SkillTreeAPI.Core\SkillTreeAPI.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models\Requests\" />
-      <Folder Include="Models\Responses\" />
+      <Folder Include="Repositories\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

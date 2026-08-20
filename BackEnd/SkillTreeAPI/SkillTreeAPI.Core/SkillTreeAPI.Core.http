@@ -1,0 +1,6 @@
+@SkillTreeAPI.Core_HostAddress = http://localhost:5237
+
+GET {{SkillTreeAPI.Core_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

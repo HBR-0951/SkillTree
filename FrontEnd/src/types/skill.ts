@@ -20,7 +20,7 @@ export interface NoteRef {
 
 /** 單篇筆記閱讀頁的資料 */
 export interface NoteDetail extends Note {
-  skillId: string
+  skillSlug: string
   skillName: string
   /** 後端把 markdown 轉好的 HTML；前端只負責排版 */
   contentHtml: string
@@ -46,10 +46,13 @@ export interface Position {
 }
 
 export interface Skill {
+  /** 資料庫 primary key。未來會接上真的 DB 後換成 long；前端邏輯完全不參照這個欄位。 */
   id: string
+  /** 人類可讀、建立後不變的識別碼。parent / URL / notesDir 等所有「參照」都用這個欄位。 */
+  slug: string
   name: string
   tier: Tier
-  /** 前置技能 id；null 代表直接接在 root */
+  /** 前置技能的 slug；null 代表直接接在 root */
   parent: string | null
   level: number
   /** 0–100 */
@@ -67,7 +70,8 @@ export interface Skill {
 
 /** 新增或編輯時送出的內容 */
 export interface SkillDraft {
-  id?: string
+  /** 有值代表編輯既有技能（取自 Skill.slug）；新建立時交給後端指派 */
+  slug?: string
   name: string
   tier: Tier
   parent: string | null
@@ -113,6 +117,7 @@ export interface LaidOutSkill extends Skill {
 }
 
 export interface Edge {
+  /** 兩端都是 Skill.slug（root 用字面 'root'） */
   from: string
   to: string
   path: string

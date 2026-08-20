@@ -1,0 +1,57 @@
+.scroller {
+  border: 1px solid var(--wood-faint);
+  border-radius: 18px;
+  background:
+    radial-gradient(700px 460px at 50% 96%, rgba(92, 68, 48, 0.55) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(37, 58, 38, 0.42) 0%, rgba(46, 40, 26, 0.34) 46%, rgba(52, 38, 25, 0.42) 100%);
+  overflow: auto;
+  max-height: 82vh;
+}
+.canvas {
+  position: relative;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--green) 0 6px, transparent 6px 12px);
+  opacity: 0.8;
+}
+.guide-label {
+  position: absolute;
+  left: 10px;
+  top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--green-bright);
+}
+.root {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.diamond {
+  width: 20px;
+  height: 20px;
+  background: var(--wood);
+  transform: rotate(45deg);
+  box-shadow: 0 0 20px 3px rgba(139, 94, 52, 0.6);
+}
+.root-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #d4b58e;
+  white-space: nowrap;
+}

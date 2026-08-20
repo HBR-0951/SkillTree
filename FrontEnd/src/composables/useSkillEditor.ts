@@ -21,7 +21,7 @@ function emptyDraft(parent: string | null, tier: Tier): SkillDraft {
 
 function draftFrom(skill: Skill): SkillDraft {
   return {
-    id: skill.id,
+    slug: skill.slug,
     name: skill.name,
     tier: skill.tier,
     parent: skill.parent,
@@ -47,7 +47,7 @@ export function useSkillEditor() {
 
   function startCreate(parent: Skill | null) {
     mode.value = 'create'
-    draft.value = emptyDraft(parent?.id ?? null, nextTier(parent?.tier))
+    draft.value = emptyDraft(parent?.slug ?? null, nextTier(parent?.tier))
     diff.value = null
     pr.value = null
     step.value = 'form'
@@ -90,8 +90,8 @@ export function useSkillEditor() {
     busy.value = true
     try {
       pr.value =
-        mode.value === 'edit' && draft.value.id
-          ? await updateSkill(draft.value.id, draft.value)
+        mode.value === 'edit' && draft.value.slug
+          ? await updateSkill(draft.value.slug, draft.value)
           : await createSkill(draft.value)
       step.value = 'submitted'
     } finally {
@@ -99,10 +99,10 @@ export function useSkillEditor() {
     }
   }
 
-  async function remove(id: string, reassignChildrenTo: string | null) {
+  async function remove(slug: string, reassignChildrenTo: string | null) {
     busy.value = true
     try {
-      pr.value = await deleteSkill(id, reassignChildrenTo)
+      pr.value = await deleteSkill(slug, reassignChildrenTo)
       step.value = 'submitted'
     } finally {
       busy.value = false

@@ -9,7 +9,7 @@ export const router = createRouter({
       name: 'tree',
       component: TreeView,
       // ?skill=kubernetes 直接開該節點的面板
-      props: (route) => ({ initialSkillId: (route.query.skill as string) ?? null }),
+      props: (route) => ({ initialSkillSlug: (route.query.skill as string) ?? null }),
     },
     {
       path: '/notes/:slug',

@@ -20,6 +20,7 @@ export function delay<T>(value: T, ms = 260): Promise<T> {
 type NoteSeed = [date: string, title: string, excerpt: string]
 
 interface SkillSeed {
+  /** mock 用：當作 Skill.slug，以及 notesDir/notes 內部查表的 key。Skill.id 另外用陣列 index 產生假數字。 */
   id: string
   name: string
   tier: Skill['tier']
@@ -256,12 +257,14 @@ const SEEDS: SkillSeed[] = [
   },
 ]
 
-function slugify(skillId: string, index: number) {
-  return `${skillId}-${String(index + 1).padStart(2, '0')}`
+function slugify(skillSlug: string, index: number) {
+  return `${skillSlug}-${String(index + 1).padStart(2, '0')}`
 }
 
-export const MOCK_SKILLS: Skill[] = SEEDS.map((seed) => ({
-  id: seed.id,
+export const MOCK_SKILLS: Skill[] = SEEDS.map((seed, index) => ({
+  /** 假的 PK：型別維持 string，但值看起來像未來 DB 會生的數字 */
+  id: String(index + 1),
+  slug: seed.id,
   name: seed.name,
   tier: seed.tier,
   parent: seed.parent,
@@ -290,7 +293,7 @@ export const MOCK_NOTES: Record<string, Note[]> = Object.fromEntries(
 
 const FLAT_NOTES = SEEDS.flatMap((seed) =>
   seed.notes.map(([date, title, excerpt], i) => ({
-    skillId: seed.id,
+    skillSlug: seed.id,
     skillName: seed.name,
     note: {
       slug: slugify(seed.id, i),
@@ -306,7 +309,7 @@ export function mockRecentNotes(limit: number) {
   return [...FLAT_NOTES]
     .sort((a, b) => (a.note.date < b.note.date ? 1 : -1))
     .slice(0, limit)
-    .map((entry) => ({ ...entry.note, skillId: entry.skillId, skillName: entry.skillName }))
+    .map((entry) => ({ ...entry.note, skillSlug: entry.skillSlug, skillName: entry.skillName }))
 }
 
 /** 只有這篇寫了完整內文，其他篇用同樣結構的示意內容 */
@@ -358,7 +361,7 @@ export function mockNoteDetail(slug: string): NoteDetail {
 
   return {
     ...entry.note,
-    skillId: entry.skillId,
+    skillSlug: entry.skillSlug,
     skillName: entry.skillName,
     contentHtml: isFull ? FULL_BODY : genericBody(entry.note.title, entry.note.excerpt),
     headings: isFull
@@ -377,16 +380,16 @@ export function mockNoteDetail(slug: string): NoteDetail {
     updated: null,
     prev: prev ? { slug: prev.note.slug, title: prev.note.title } : null,
     next: next ? { slug: next.note.slug, title: next.note.title } : null,
-    sourcePath: `notes/${entry.skillId}/${slug}.md`,
+    sourcePath: `notes/${entry.skillSlug}/${slug}.md`,
   }
 }
 
 /** 假的 YAML diff：新增技能時全部是 + 行，索引檔改一行 */
 export function mockDiff(draft: SkillDraft, mode: 'create' | 'edit'): DiffPreview {
-  const id = draft.id ?? draft.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  const slug = draft.slug ?? draft.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
   const yaml = [
-    `id: ${id}`,
+    `slug: ${slug}`,
     `name: ${draft.name}`,
     `tier: ${draft.tier}`,
     `parent: ${draft.parent ?? 'null'}`,
@@ -399,27 +402,27 @@ export function mockDiff(draft: SkillDraft, mode: 'create' | 'edit'): DiffPrevie
     'position:',
     `  x: ${draft.position?.x ?? 700}`,
     `  y: ${draft.position?.y ?? 110}`,
-    `notes_dir: ${draft.notesDir || `notes/${id}/`}`,
+    `notes_dir: ${draft.notesDir || `notes/${slug}/`}`,
     'works:',
     ...draft.workUrls.map((u) => `  - url: ${u}`),
     `created: ${new Date().toISOString().slice(0, 10)}`,
   ]
 
   const skillFile: DiffFile = {
-    path: `skills/${id}.yaml`,
+    path: `skills/${slug}.yaml`,
     status: mode === 'create' ? 'added' : 'modified',
     lines: yaml.map((text, i) => ({ sign: '+' as const, text, line: i + 1 })),
   }
 
-  const parentId = draft.parent ?? 'root'
+  const parentSlug = draft.parent ?? 'root'
   const indexFile: DiffFile = {
-    path: `skills/${parentId}.yaml`,
+    path: `skills/${parentSlug}.yaml`,
     status: 'modified',
     lines: [
       { sign: ' ', text: 'children:', line: 12 },
       { sign: '-', text: '  - aws-cloud', line: 13 },
       { sign: '+', text: '  - aws-cloud', line: 13 },
-      { sign: '+', text: `  - ${id}`, line: 14 },
+      { sign: '+', text: `  - ${slug}`, line: 14 },
     ],
   }
 
@@ -431,9 +434,9 @@ export function mockDiff(draft: SkillDraft, mode: 'create' | 'edit'): DiffPrevie
     deletions: files.reduce((n, f) => n + f.lines.filter((l) => l.sign === '-').length, 0),
     checks: [
       { label: 'YAML 語法檢查通過', level: 'ok' },
-      { label: `前置技能 ${parentId} 存在`, level: 'ok' },
-      { label: 'id 未重複', level: 'ok' },
-      { label: `${draft.notesDir || `notes/${id}/`} 目前是空的`, level: 'warn' },
+      { label: `前置技能 ${parentSlug} 存在`, level: 'ok' },
+      { label: 'slug 未重複', level: 'ok' },
+      { label: `${draft.notesDir || `notes/${slug}/`} 目前是空的`, level: 'warn' },
     ],
   }
 }
@@ -441,13 +444,13 @@ export function mockDiff(draft: SkillDraft, mode: 'create' | 'edit'): DiffPrevie
 let prCounter = 127
 
 export function mockPullRequest(draft: SkillDraft, action: 'add' | 'update' | 'remove'): PullRequest {
-  const id = draft.id ?? draft.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  const slug = draft.slug ?? draft.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const verb = action === 'add' ? 'Add' : action === 'update' ? 'Update' : 'Remove'
   prCounter += 1
   return {
     number: prCounter,
     url: `https://github.com/example/skill-tree/pull/${prCounter}`,
-    branch: `skill/${id}`,
+    branch: `skill/${slug}`,
     title: `${verb} skill: ${draft.name}`,
   }
 }

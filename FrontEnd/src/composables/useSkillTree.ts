@@ -8,13 +8,13 @@ export function useSkillTree() {
   const loading = ref(true)
   const error = ref<string | null>(null)
 
-  const selectedId = ref<string | null>(null)
+  const selectedSlug = ref<string | null>(null)
   const notes = shallowRef<Note[]>([])
   const notesLoading = ref(false)
 
   const nodes = computed(() => layout(skills.value))
   const edges = computed(() => buildEdges(nodes.value))
-  const selected = computed(() => nodes.value.find((n) => n.id === selectedId.value) ?? null)
+  const selected = computed(() => nodes.value.find((n) => n.slug === selectedSlug.value) ?? null)
 
   const totals = computed(() => ({
     level: skills.value.reduce((sum, s) => sum + (s.pending ? 0 : s.level), 0),
@@ -34,13 +34,13 @@ export function useSkillTree() {
     }
   }
 
-  async function select(id: string | null) {
-    selectedId.value = id
+  async function select(slug: string | null) {
+    selectedSlug.value = slug
     notes.value = []
-    if (!id) return
+    if (!slug) return
     notesLoading.value = true
     try {
-      notes.value = await fetchNotes(id)
+      notes.value = await fetchNotes(slug)
     } catch (e) {
       error.value = e instanceof Error ? e.message : '讀取筆記失敗'
     } finally {
@@ -49,8 +49,8 @@ export function useSkillTree() {
   }
 
   /** 拖拉後先在前端更新座標，等 PR 合併才是真的 */
-  function moveNode(id: string, x: number, y: number) {
-    skills.value = skills.value.map((s) => (s.id === id ? { ...s, position: { x, y } } : s))
+  function moveNode(slug: string, x: number, y: number) {
+    skills.value = skills.value.map((s) => (s.slug === slug ? { ...s, position: { x, y } } : s))
   }
 
   onMounted(load)
@@ -61,7 +61,7 @@ export function useSkillTree() {
     edges,
     loading,
     error,
-    selectedId,
+    selectedSlug,
     selected,
     notes,
     notesLoading,

@@ -37,7 +37,7 @@ export function layout(skills: Skill[]): LaidOutSkill[] {
 
     row.forEach((skill, i) => {
       const autoX = row.length === 1 ? CANVAS.width / 2 : H_MARGIN + step * i
-      placed.set(skill.id, {
+      placed.set(skill.slug, {
         ...skill,
         x: skill.position?.x ?? Math.round(autoX),
         y: skill.position?.y ?? TIER_Y[tier],
@@ -55,17 +55,17 @@ function anchor(node: { x: number; y: number }, side: 'top' | 'bottom') {
 }
 
 export function buildEdges(nodes: LaidOutSkill[]): Edge[] {
-  const byId = new Map(nodes.map((n) => [n.id, n]))
+  const bySlug = new Map(nodes.map((n) => [n.slug, n]))
 
   return nodes.map((node) => {
-    const parent = node.parent ? byId.get(node.parent) : undefined
+    const parent = node.parent ? bySlug.get(node.parent) : undefined
     const from = parent ? anchor(parent, 'top') : { x: ROOT.x, y: ROOT.y - 20 }
     const to = anchor(node, 'bottom')
     const mid = (from.y + to.y) / 2
 
     return {
-      from: parent?.id ?? 'root',
-      to: node.id,
+      from: parent?.slug ?? 'root',
+      to: node.slug,
       path: `M ${from.x} ${from.y} C ${from.x} ${mid} ${to.x} ${mid} ${to.x} ${to.y}`,
       strength: Math.min(parent?.progress ?? 100, node.progress),
     }

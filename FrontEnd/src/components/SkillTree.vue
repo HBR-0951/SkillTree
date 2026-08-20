@@ -9,19 +9,19 @@ const props = defineProps<{
   nodes: LaidOutSkill[]
   edges: Edge[]
   editMode: boolean
-  selectedId: string | null
+  selectedSlug: string | null
   /** 表單填寫中的預覽節點 */
   ghost?: LaidOutSkill | null
 }>()
 
 const emit = defineEmits<{
-  select: [id: string]
-  addChild: [id: string]
-  move: [id: string, x: number, y: number]
+  select: [slug: string]
+  addChild: [slug: string]
+  move: [slug: string, x: number, y: number]
 }>()
 
 const scroller = ref<HTMLElement | null>(null)
-const draggingId = ref<string | null>(null)
+const draggingSlug = ref<string | null>(null)
 const snappedTier = ref<string | null>(null)
 
 /** 樹是從 root 往上長的，所以一進來先看底部中央 */
@@ -52,9 +52,9 @@ const leaves = computed(() => {
   })
 })
 
-function onDragStart(id: string, event: PointerEvent) {
+function onDragStart(slug: string, event: PointerEvent) {
   if (!props.editMode) return
-  const node = props.nodes.find((n) => n.id === id)
+  const node = props.nodes.find((n) => n.slug === slug)
   const host = scroller.value
   if (!node || !host) return
 
@@ -65,20 +65,20 @@ function onDragStart(id: string, event: PointerEvent) {
 
   const onMove = (e: PointerEvent) => {
     moved = true
-    draggingId.value = id
+    draggingSlug.value = slug
     const raw = clampToCanvas(
       e.clientX - rect.left + host.scrollLeft - offsetX,
       e.clientY - rect.top + host.scrollTop - offsetY,
     )
     const snap = snapToTier(raw.y, node.tier)
     snappedTier.value = snap.snapped ? node.tier : null
-    emit('move', id, Math.round(raw.x), Math.round(snap.y))
+    emit('move', slug, Math.round(raw.x), Math.round(snap.y))
   }
 
   const onUp = () => {
     window.removeEventListener('pointermove', onMove)
     window.removeEventListener('pointerup', onUp)
-    draggingId.value = null
+    draggingSlug.value = null
     snappedTier.value = null
     // 沒真的移動就當成點擊，交給 SkillNode 的 click
     if (!moved) return
@@ -139,11 +139,11 @@ function onDragStart(id: string, event: PointerEvent) {
 
       <SkillNode
         v-for="node in nodes"
-        :key="node.id"
+        :key="node.slug"
         :node="node"
         :edit-mode="editMode"
-        :selected="node.id === selectedId"
-        :dragging="node.id === draggingId"
+        :selected="node.slug === selectedSlug"
+        :dragging="node.slug === draggingSlug"
         @select="emit('select', $event)"
         @add-child="emit('addChild', $event)"
         @drag-start="onDragStart"
@@ -154,62 +154,4 @@ function onDragStart(id: string, event: PointerEvent) {
   </div>
 </template>
 
-<style scoped>
-.scroller {
-  border: 1px solid var(--wood-faint);
-  border-radius: 18px;
-  background:
-    radial-gradient(700px 460px at 50% 96%, rgba(92, 68, 48, 0.55) 0%, transparent 70%),
-    linear-gradient(180deg, rgba(37, 58, 38, 0.42) 0%, rgba(46, 40, 26, 0.34) 46%, rgba(52, 38, 25, 0.42) 100%);
-  overflow: auto;
-  max-height: 82vh;
-}
-.canvas {
-  position: relative;
-}
-.layer {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.guide {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: repeating-linear-gradient(90deg, var(--green) 0 6px, transparent 6px 12px);
-  opacity: 0.8;
-}
-.guide-label {
-  position: absolute;
-  left: 10px;
-  top: 6px;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--green-bright);
-}
-.root {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.diamond {
-  width: 20px;
-  height: 20px;
-  background: var(--wood);
-  transform: rotate(45deg);
-  box-shadow: 0 0 20px 3px rgba(139, 94, 52, 0.6);
-}
-.root-label {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #d4b58e;
-  white-space: nowrap;
-}
-</style>
+<style scoped src="@/styles/components/SkillTree.css"></style>
