@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #322418; }
+  @keyframes leafSway { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-9px) rotate(4deg); } }
+  * { box-sizing: border-box; }
+  a { color: #3FB950; text-decoration: none; }
+  a:hover { color: #7EE787; }
+  @keyframes panelIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: #3A2A1B; border-radius: 5px; }
+  ::-webkit-scrollbar-track { background: #140F0A; }
+</style>
+</helmet>
+<div style="min-height: 100vh; background: radial-gradient(900px 560px at 22% 8%, rgba(63,185,80,.14) 0%, transparent 70%), radial-gradient(760px 520px at 88% 26%, rgba(63,185,80,.10) 0%, transparent 72%), radial-gradient(1300px 760px at 50% 100%, #5C4430 0%, #40301F 52%, #322418 100%); color: #EFE7DC; font-family: 'Space Grotesk', Helvetica, sans-serif; -webkit-font-smoothing: antialiased;">
+
+  <header style="max-width: 1680px; margin: 0 auto; padding: 32px 40px 20px; display: flex; align-items: flex-end; justify-content: space-between; gap: 36px; flex-wrap: wrap; border-bottom: 1px solid #241A11;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #C9A981;">devops learning path</div>
+      <h1 style="margin: 0; font-size: 40px; line-height: 1; font-weight: 600; letter-spacing: -0.025em;">Skill Tree</h1>
+      <p style="margin: 0; max-width: 440px; font-size: 14px; line-height: 1.65; color: #9C8B78; text-wrap: pretty;">一棵持續生長的樹。每個節點是一項技能，點開就是我在那條路上寫下的 notes 與做出來的 works。</p>
+    </div>
+    <div style="display: flex; align-items: flex-end; gap: 28px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">total lv</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 25px; font-weight: 600; color: #3FB950;">{{ totalLv }}</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">notes</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 25px; font-weight: 600;">{{ noteCount }}</div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">works</div>
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 25px; font-weight: 600;">{{ workCount }}</div>
+      </div>
+      <nav style="display: flex; gap: 8px; padding-bottom: 5px;">
+        <a href="#about" style="font-size: 13px; padding: 7px 15px; border: 1px solid #3A2A1B; border-radius: 999px; color: #D6C7B4; background: #16100B;" style-hover="border-color: #8B5E34; color: #EFE7DC;">About</a>
+        <a href="#" style="font-size: 13px; padding: 7px 15px; border: 1px solid #3A2A1B; border-radius: 999px; color: #D6C7B4; background: #16100B;" style-hover="border-color: #8B5E34; color: #EFE7DC;">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <section style="max-width: 1680px; margin: 0 auto; padding: 0 40px 56px; display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start;">
+
+    <div style="padding-top: 14px; min-width: 0;">
+      <div style="display: flex; align-items: center; gap: 20px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C0A483; padding: 0 2px 12px;">
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #3FB950; box-shadow: 0 0 9px 1px rgba(63,185,80,.9);"></span>MASTERED</span>
+        <span style="display: flex; align-items: center; gap: 7px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2A7A38;"></span>LEARNING</span>
+        <span style="display: flex; align-items: center; gap: 7px; color: #B39877;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4A3624; border: 1px solid #6B5238;"></span>NOT STARTED</span>
+        <span style="margin-left: auto; color: #C9A981;">全部可點 · 亮度代表進度</span>
+      </div>
+
+      <div style="border: 1px solid #4A3624; border-radius: 18px; background: radial-gradient(700px 460px at 50% 96%, rgba(92,68,48,.55) 0%, transparent 70%), linear-gradient(180deg, rgba(37,58,38,.42) 0%, rgba(46,40,26,.34) 46%, rgba(52,38,25,.42) 100%); overflow: auto; max-height: 82vh;" ref="{{ scroller }}">
+        <div style="position: relative; width: 1240px; height: 1030px;">
+          <svg viewBox="0 0 1240 1030" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
+            <sc-for list="{{ leaves }}" as="l" hint-placeholder-count="24">
+              <ellipse cx="{{ l.cx }}" cy="{{ l.cy }}" rx="{{ l.rx }}" ry="{{ l.ry }}" fill="{{ l.fill }}" opacity="{{ l.o }}" transform="{{ l.rot }}"></ellipse>
+            </sc-for>
+          </svg>
+          <svg viewBox="0 0 1240 1030" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+            <sc-for list="{{ edges }}" as="e" hint-placeholder-count="14">
+              <path d="{{ e.d }}" fill="none" stroke="{{ e.stroke }}" stroke-width="{{ e.w }}" stroke-linecap="round" stroke-dasharray="{{ e.dash }}"></path>
+            </sc-for>
+          </svg>
+
+          <div style="position: absolute; left: 620px; top: 972px; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 8px;">
+            <div style="width: 20px; height: 20px; background: #8B5E34; transform: rotate(45deg); box-shadow: 0 0 20px 3px rgba(139,94,52,.6);"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #D4B58E;">root · ./start</div>
+          </div>
+
+          <sc-for list="{{ nodes }}" as="n" hint-placeholder-count="11">
+            <div style="position: absolute; transform: translate(-50%, -50%); left: {{ n.x }}px; top: {{ n.y }}px;">
+              <button type="button" onClick="{{ n.onSelect }}" style="width: 196px; text-align: left; cursor: pointer; border-radius: 13px; padding: 13px 14px 12px; display: flex; flex-direction: column; gap: 10px; font-family: inherit; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; background-image: repeating-linear-gradient(112deg, rgba(139,94,52,.09) 0 1px, transparent 1px 5px), repeating-linear-gradient(112deg, rgba(0,0,0,.16) 0 1px, transparent 1px 11px); background-color: {{ n.bg }}; border: 1px solid {{ n.border }}; color: {{ n.title }}; box-shadow: {{ n.shadow }};" style-hover="transform: translateY(-3px); border-color: #B87F45; box-shadow: 0 0 0 1px rgba(184,127,69,.35), 0 14px 28px -12px rgba(0,0,0,.8), 0 0 26px -6px rgba(63,185,80,.35);">
+                <div style="display: flex; align-items: center; gap: 9px;">
+                  <span style="width: 9px; height: 9px; border-radius: 50%; flex: none; background: {{ n.dot }}; box-shadow: {{ n.dotGlow }};"></span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: {{ n.meta }};">{{ n.tier }}</span>
+                  <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: {{ n.lvColor }};">Lv.{{ n.lv }}</span>
+                </div>
+                <div style="font-size: 15.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2;">{{ n.name }}</div>
+                <div style="display: flex; align-items: center; gap: 9px;">
+                  <span style="flex: 1; height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.28); display: block; overflow: hidden;">
+                    <span style="display: block; height: 100%; width: {{ n.pct }}%; background: {{ n.bar }}; box-shadow: {{ n.barGlow }};"></span>
+                  </span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: {{ n.meta }};">{{ n.countLabel }}</span>
+                </div>
+              </button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <aside style="position: sticky; top: 20px; border: 1px solid #2E2116; border-radius: 18px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); background-image: repeating-linear-gradient(108deg, rgba(139,94,52,.055) 0 1px, transparent 1px 6px); padding: 22px; min-height: 660px; max-height: 86vh; overflow-y: auto; display: flex; flex-direction: column; gap: 18px;">
+
+      <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 18px; animation: panelIn .26s ease both;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8B5E34;">{{ sel.tier }} · {{ sel.status }}</div>
+              <h2 style="margin: 0; font-size: 27px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.08;">{{ sel.name }}</h2>
+            </div>
+            <button type="button" onClick="{{ clearSel }}" style="flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid #3A2A1B; background: #16100B; color: #9C8B78; cursor: pointer; font-size: 15px; line-height: 1; font-family: inherit;" style-hover="border-color: #8B5E34; color: #EFE7DC;">×</button>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950;">Lv.{{ sel.lv }}</span>
+            <span style="flex: 1; height: 6px; border-radius: 3px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); display: block; overflow: hidden;">
+              <span style="display: block; height: 100%; width: {{ sel.pct }}%; background: #3FB950; box-shadow: 0 0 10px rgba(63,185,80,.7);"></span>
+            </span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7A6853;">{{ sel.pct }}%</span>
+          </div>
+
+          <p style="margin: 0; font-size: 13.5px; line-height: 1.7; color: #A5947F; text-wrap: pretty;">{{ sel.blurb }}</p>
+
+          <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+            <sc-for list="{{ sel.tags }}" as="t" hint-placeholder-count="3">
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 5px 9px; border-radius: 5px; background: #1E1610; border: 1px solid #3A2A1B; color: #C9A981;">{{ t }}</span>
+            </sc-for>
+          </div>
+
+          <div style="height: 1px; background: #2E2116;"></div>
+
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8B5E34;">notes</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5C4C3A;">{{ sel.noteLabel }}</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 2px; margin: 0 -6px;">
+            <sc-for list="{{ sel.notes }}" as="note" hint-placeholder-count="4">
+              <a href="#" style="display: flex; flex-direction: column; gap: 5px; padding: 11px 10px; border-radius: 9px; border: 1px solid transparent; text-decoration: none;" style-hover="background: #1E1610; border-color: #3A2A1B; text-decoration: none;">
+                <div style="display: flex; align-items: baseline; gap: 10px;">
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5C4C3A; flex: none; width: 54px;">{{ note.date }}</span>
+                  <span style="font-size: 14px; font-weight: 500; color: #EFE7DC; line-height: 1.35;">{{ note.title }}</span>
+                </div>
+                <div style="font-size: 12.5px; color: #8E7D69; line-height: 1.5; padding-left: 64px; text-wrap: pretty;">{{ note.excerpt }}</div>
+              </a>
+            </sc-for>
+          </div>
+
+          <a href="#" style="display: block; text-align: center; padding: 11px; border-radius: 9px; border: 1px solid #3A2A1B; background: #1A130D; font-size: 13px; font-weight: 500; color: #C9A981;" style-hover="border-color: #8B5E34; color: #EFE7DC; text-decoration: none;">全部 {{ sel.name }} 筆記 →</a>
+
+          <sc-if value="{{ sel.hasWorks }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 12px; padding-top: 4px;">
+              <div style="height: 1px; background: #2E2116;"></div>
+              <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8B5E34;">works</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5C4C3A;">{{ sel.workLabel }}</div>
+              </div>
+              <sc-for list="{{ sel.works }}" as="w" hint-placeholder-count="2">
+                <a href="#" style="display: flex; flex-direction: column; gap: 7px; padding: 13px; border-radius: 11px; border: 1px solid #3A2A1B; background: #16100B; text-decoration: none;" style-hover="border-color: #8B5E34; background: #1E1610; text-decoration: none;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 14px; font-weight: 600; color: #EFE7DC;">{{ w.title }}</span>
+                    <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #3FB950;">{{ w.kind }} ↗</span>
+                  </div>
+                  <div style="font-size: 12.5px; color: #8E7D69; line-height: 1.55; text-wrap: pretty;">{{ w.desc }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #7A6853;">{{ w.stack }}</div>
+                </a>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noSel }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8B5E34;">overview</div>
+          <h2 style="margin: 0; font-size: 23px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25;">選一個節點，<br />看那條路上的筆記</h2>
+          <div style="height: 1px; background: #2E2116;"></div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #8B5E34;">latest notes</div>
+          <div style="display: flex; flex-direction: column; gap: 2px; margin: 0 -6px;">
+            <sc-for list="{{ recent }}" as="note" hint-placeholder-count="6">
+              <a href="#" style="display: flex; align-items: baseline; gap: 10px; padding: 11px 10px; border-radius: 9px; border: 1px solid transparent; text-decoration: none;" style-hover="background: #1E1610; border-color: #3A2A1B; text-decoration: none;">
+                <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #5C4C3A; flex: none; width: 54px;">{{ note.date }}</span>
+                <span style="display: flex; flex-direction: column; gap: 3px;">
+                  <span style="font-size: 13.5px; font-weight: 500; color: #EFE7DC; line-height: 1.35;">{{ note.title }}</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #7A6853;">{{ note.skill }}</span>
+                </span>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </aside>
+  </section>
+
+  <footer id="about" style="max-width: 1680px; margin: 0 auto; padding: 26px 40px 60px; border-top: 1px solid #241A11; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C0A483; letter-spacing: 0.06em;">
+    <span>© 2026 · 往 DevOps 的路上</span>
+    <span>built &amp; broken by myself</span>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#3FB950&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#3FB950&quot;,&quot;#4C8DFF&quot;,&quot;#F0883E&quot;,&quot;#C9A227&quot;],&quot;section&quot;:&quot;Theme&quot;},&quot;woodColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#8B5E34&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#8B5E34&quot;,&quot;#6B4A2B&quot;,&quot;#A9784B&quot;],&quot;section&quot;:&quot;Theme&quot;}}">
+const GREEN = "#3FB950";
+
+const SKILLS = [
+  { id: "linux", name: "Linux / Shell", x: 300, y: 792, tier: "foundation", lv: 4, pct: 88, status: "MASTERED",
+    blurb: "所有東西的地板。權限、程序、檔案系統，還有讓我少打幾百次字的 shell script。",
+    tags: ["bash", "systemd", "vim"],
+    notes: [
+      { date: "08/14", title: "systemd unit 從零寫到能開機自啟", excerpt: "service / timer / socket 三種 unit 的差別，還有 journalctl 該怎麼追。" },
+      { date: "07/28", title: "權限模型：rwx 之外的 setuid 與 ACL", excerpt: "為什麼 chmod 777 不是解法，以及 getfacl 的實際用途。" },
+      { date: "07/09", title: "把重複操作收成 shell function", excerpt: "set -euo pipefail、trap 清理、參數檢查的固定寫法。" },
+      { date: "06/22", title: "用 strace 找出卡住的程序", excerpt: "一次線上服務無回應的排查流程紀錄。" }
+    ],
+    works: [
+      { title: "dotfiles", kind: "repo", desc: "我自己的 zsh / tmux / nvim 設定，一行指令裝到新機器上。", stack: "Bash · Stow · Make" }
+    ] },
+  { id: "git", name: "Git & 版本控制", x: 620, y: 802, tier: "foundation", lv: 4, pct: 90, status: "MASTERED",
+    blurb: "不只是 commit 和 push。分支策略決定了整個團隊怎麼協作，也決定了 CI 要怎麼設計。",
+    tags: ["rebase", "trunk-based", "hooks"],
+    notes: [
+      { date: "08/02", title: "rebase 與 merge 我最後怎麼選", excerpt: "個人分支 rebase、進主線 merge，加上不可 force-push 的界線。" },
+      { date: "07/15", title: "Trunk-based 與 Git Flow 的實務差異", excerpt: "發佈頻率如何反過來決定分支模型。" },
+      { date: "06/30", title: "pre-commit hook 擋掉低級錯誤", excerpt: "lint、secret 掃描、commit message 格式。" }
+    ],
+    works: [] },
+  { id: "network", name: "Networking", x: 940, y: 792, tier: "foundation", lv: 3, pct: 62, status: "LEARNING",
+    blurb: "排查問題時最常回來的地方。DNS、TLS、路由，弄懂之後很多「玄學問題」就不玄了。",
+    tags: ["tcp/ip", "dns", "tls"],
+    notes: [
+      { date: "08/17", title: "一次 DNS 解析失敗的完整排查", excerpt: "dig 逐層追、TTL 快取、resolv.conf 的優先序。" },
+      { date: "07/21", title: "TLS 握手到底在做什麼", excerpt: "憑證鏈驗證、SNI，以及憑證過期造成的典型症狀。" },
+      { date: "06/12", title: "子網切分與 CIDR 手算練習", excerpt: "為了看懂 VPC 設定而補的基礎。" }
+    ],
+    works: [] },
+  { id: "docker", name: "Docker / 容器", x: 268, y: 604, tier: "build", lv: 4, pct: 85, status: "MASTERED",
+    blurb: "容器不是輕量 VM。理解 namespace 與 layer 之後，映像檔才會又小又快。",
+    tags: ["dockerfile", "multi-stage", "registry"],
+    notes: [
+      { date: "08/11", title: "multi-stage build 讓映像從 1.2G 降到 90M", excerpt: "編譯階段與執行階段分離，加上 distroless base。" },
+      { date: "07/25", title: "layer cache 的命中規則", excerpt: "COPY 的順序如何決定重建速度。" },
+      { date: "07/03", title: "容器裡不要跑 root", excerpt: "非 root user、唯讀檔案系統、capability 最小化。" }
+    ],
+    works: [
+      { title: "note-api", kind: "repo", desc: "自己寫的筆記後端，容器化並推上 registry，映像 90MB。", stack: "Go · Docker · PostgreSQL" }
+    ] },
+  { id: "db", name: "資料庫", x: 596, y: 616, tier: "build", lv: 2, pct: 45, status: "LEARNING",
+    blurb: "維運的資料庫和開發用的資料庫是兩件事。備份、還原、連線池才是我現在的重點。",
+    tags: ["postgres", "backup", "index"],
+    notes: [
+      { date: "08/06", title: "PostgreSQL 備份還原實際演練一次", excerpt: "pg_dump 與 PITR 的取捨，還有還原比備份難的原因。" },
+      { date: "07/18", title: "連線數爆掉之後才學會的連線池", excerpt: "PgBouncer 的三種 pool mode。" }
+    ],
+    works: [] },
+  { id: "cicd", name: "CI / CD", x: 928, y: 604, tier: "build", lv: 3, pct: 70, status: "LEARNING",
+    blurb: "整條路上最有成就感的一段：從 push 到部署完成，全部自動跑完。",
+    tags: ["github actions", "pipeline", "artifact"],
+    notes: [
+      { date: "08/19", title: "GitHub Actions 建一條會過的 pipeline", excerpt: "lint → test → build → push image → deploy 的實際 workflow。" },
+      { date: "08/04", title: "cache 讓 CI 從 9 分鐘變 2 分鐘", excerpt: "依賴快取與 layer 快取的設定位置。" },
+      { date: "07/12", title: "把 secret 從 pipeline 裡拿出來", excerpt: "OIDC 短期憑證取代長期 access key。" }
+    ],
+    works: [
+      { title: "ci-templates", kind: "repo", desc: "可重複使用的 Actions workflow 範本，四個專案共用。", stack: "GitHub Actions · YAML" }
+    ] },
+  { id: "k8s", name: "Kubernetes", x: 248, y: 414, tier: "orchestrate", lv: 2, pct: 42, status: "LEARNING",
+    blurb: "目前投入最多時間的地方。宣告式設定的思維一旦轉過來，看什麼都不一樣。",
+    tags: ["deployment", "service", "helm"],
+    notes: [
+      { date: "08/18", title: "Pod 一直 CrashLoopBackOff 的六種原因", excerpt: "從 describe 到 logs --previous 的固定排查順序。" },
+      { date: "08/09", title: "Service 與 Ingress 的流量路徑", excerpt: "ClusterIP / NodePort / LoadBalancer 到底差在哪。" },
+      { date: "07/30", title: "requests 與 limits 設錯的後果", excerpt: "QoS class 如何影響誰先被 OOMKill。" }
+    ],
+    works: [
+      { title: "homelab-k8s", kind: "repo", desc: "三台舊筆電組的 k3s 叢集，跑我自己的服務與監控。", stack: "k3s · Helm · Traefik" }
+    ] },
+  { id: "iac", name: "Terraform / Ansible", x: 596, y: 424, tier: "orchestrate", lv: 2, pct: 38, status: "LEARNING",
+    blurb: "把基礎設施寫成程式碼。state 的概念是我卡最久、也最值得的一關。",
+    tags: ["terraform", "ansible", "state"],
+    notes: [
+      { date: "08/15", title: "Terraform state 到底存了什麼", excerpt: "remote backend、鎖，以及手改資源後的災難。" },
+      { date: "07/27", title: "module 化：不要複製貼上 tf 檔", excerpt: "變數、輸出、版本鎖定的組織方式。" }
+    ],
+    works: [] },
+  { id: "cloud", name: "AWS / 雲端", x: 940, y: 414, tier: "orchestrate", lv: 2, pct: 40, status: "LEARNING",
+    blurb: "先把 IAM、VPC、運算三塊弄清楚，其他服務都是這三塊的組合。",
+    tags: ["iam", "vpc", "ec2/eks"],
+    notes: [
+      { date: "08/12", title: "IAM policy 讀懂的那一天", excerpt: "Principal / Action / Resource / Condition 四段結構。" },
+      { date: "07/22", title: "VPC 自己手動搭一次", excerpt: "子網、路由表、NAT gateway 與帳單的關係。" }
+    ],
+    works: [] },
+  { id: "observ", name: "監控 & 可觀測性", x: 400, y: 228, tier: "operate", lv: 1, pct: 22, status: "LEARNING",
+    blurb: "從「服務好像有點慢」到「這個 endpoint p99 在 08:40 開始升高」的距離。",
+    tags: ["prometheus", "grafana", "slo"],
+    notes: [
+      { date: "08/16", title: "Prometheus 的四種 metric type", excerpt: "counter、gauge、histogram、summary 各自的用途。" },
+      { date: "08/01", title: "第一塊自己做的 Grafana 儀表板", excerpt: "從 golden signals 開始選指標。" }
+    ],
+    works: [
+      { title: "homelab-dashboards", kind: "repo", desc: "叢集監控儀表板與告警規則，全部版本控管。", stack: "Prometheus · Grafana · Loki" }
+    ] },
+  { id: "sec", name: "DevSecOps", x: 800, y: 228, tier: "operate", lv: 0, pct: 8, status: "NOT STARTED",
+    blurb: "還沒正式開始，只讀了一些。計畫從供應鏈安全與 secret 管理切入。",
+    tags: ["secrets", "scanning", "supply chain"],
+    notes: [
+      { date: "07/06", title: "先弄懂 secret 管理的幾種做法", excerpt: "環境變數、Vault、雲端 secret manager 的比較筆記。" }
+    ],
+    works: [] }
+];
+
+const EDGE_LIST = [
+  ["root", "linux"], ["root", "git"], ["root", "network"],
+  ["linux", "docker"], ["git", "docker"], ["linux", "db"], ["git", "db"],
+  ["git", "cicd"], ["network", "cicd"],
+  ["docker", "k8s"], ["docker", "iac"], ["cicd", "iac"], ["network", "cloud"], ["cicd", "cloud"],
+  ["k8s", "observ"], ["iac", "observ"], ["iac", "sec"], ["cloud", "sec"]
+];
+
+const CARD_H = 44;
+
+class Component extends DCLogic {
+  state = { selId: "k8s" };
+
+  point(id) {
+    if (id === "root") return { x: 620, y: 962, pct: 100 };
+    const s = SKILLS.find(k => k.id === id);
+    return { x: s.x, y: s.y, pct: s.pct };
+  }
+
+  scroller = React.createRef();
+
+  componentDidMount() {
+    const el = this.scroller.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+    el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
+  }
+
+  leaves() {
+    const greens = ["#3FB950", "#7EE787", "#2A7A38", "#5FC46B"];
+    const out = [];
+    let seed = 7;
+    const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+    for (let i = 0; i < 46; i++) {
+      const cx = 60 + rnd() * 1120;
+      const cy = 90 + rnd() * 800;
+      const r = 9 + rnd() * 17;
+      out.push({
+        cx: Math.round(cx), cy: Math.round(cy),
+        rx: Math.round(r), ry: Math.round(r * (0.36 + rnd() * 0.2)),
+        fill: greens[i % greens.length],
+        o: (0.05 + rnd() * 0.13).toFixed(3),
+        rot: `rotate(${Math.round(-70 + rnd() * 140)} ${Math.round(cx)} ${Math.round(cy)})`
+      });
+    }
+    return out;
+  }
+
+  renderVals() {
+    const accent = this.props.accentColor || GREEN;
+    const wood = this.props.woodColor || "#8B5E34";
+
+    const edges = EDGE_LIST.map(([a, b]) => {
+      const p = this.point(a), q = this.point(b);
+      const y1 = p.y - CARD_H, y2 = q.y + CARD_H;
+      const mid = (y1 + y2) / 2;
+      const active = Math.min(p.pct, q.pct);
+      const trunk = a === "root";
+      return {
+        d: `M ${p.x} ${y1} C ${p.x} ${mid} ${q.x} ${mid} ${q.x} ${y2}`,
+        stroke: active >= 60 ? wood : active >= 30 ? "#5B4028" : "#4A3624",
+        w: trunk ? 4.5 : active >= 60 ? 2.2 : 1.5,
+        dash: active >= 30 ? "none" : "5 7"
+      };
+    });
+
+    const nodes = SKILLS.map(s => {
+      const mastered = s.pct >= 80, cold = s.pct < 20;
+      return {
+        ...s,
+        onSelect: () => this.setState({ selId: s.id }),
+        bg: mastered ? "#241A11" : cold ? "#140F0A" : "#1C150E",
+        border: mastered ? wood : cold ? "#332417" : "#4E3722",
+        shadow: mastered
+          ? `0 0 0 1px rgba(139,94,52,.25), 0 12px 26px -14px #000, 0 0 22px -8px ${accent}66`
+          : cold ? "0 8px 20px -14px #000" : "0 10px 24px -14px #000",
+        dot: mastered ? accent : cold ? "#3A2A1B" : "#2A7A38",
+        dotGlow: mastered ? `0 0 10px 1px ${accent}e6` : cold ? "none" : `0 0 6px ${accent}55`,
+        meta: cold ? "#5C4C3A" : "#8B7050",
+        lvColor: mastered ? accent : cold ? "#5C4C3A" : "#C9A981",
+        title: cold ? "#8E7D69" : "#EFE7DC",
+        bar: mastered ? accent : cold ? "#4A3624" : "#2A7A38",
+        barGlow: mastered ? `0 0 8px ${accent}aa` : "none",
+        countLabel: `${s.notes.length}n${s.works.length ? " · " + s.works.length + "w" : ""}`
+      };
+    });
+
+    const sel = SKILLS.find(s => s.id === this.state.selId);
+    const recent = SKILLS.flatMap(s => s.notes.map(n => ({ ...n, skill: s.name })))
+      .sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 7);
+
+    return {
+      edges, nodes, recent, leaves: this.leaves(), scroller: this.scroller,
+      hasSel: !!sel, noSel: !sel, clearSel: () => this.setState({ selId: null }),
+      sel: sel && {
+        ...sel,
+        hasWorks: sel.works.length > 0,
+        noteLabel: `${sel.notes.length} entries`,
+        workLabel: `${sel.works.length} project${sel.works.length > 1 ? "s" : ""}`
+      },
+      totalLv: SKILLS.reduce((a, s) => a + s.lv, 0),
+      noteCount: SKILLS.reduce((a, s) => a + s.notes.length, 0),
+      workCount: SKILLS.reduce((a, s) => a + s.works.length, 0)
+    };
+  }
+}
+
+</script>
+</body>
+</html>

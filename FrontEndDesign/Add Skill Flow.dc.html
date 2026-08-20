@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #241A11; }
+  * { box-sizing: border-box; }
+  a { color: #3FB950; text-decoration: none; }
+  a:hover { color: #7EE787; }
+  @keyframes caretBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+</style>
+</helmet>
+<div style="padding: 44px 40px 90px; background: radial-gradient(900px 560px at 20% 4%, rgba(63,185,80,.10) 0%, transparent 70%), linear-gradient(180deg, #3A2A1C 0%, #2B1F15 100%); color: #EFE7DC; font-family: 'Space Grotesk', Helvetica, sans-serif; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; gap: 52px; align-items: center;">
+
+  <div style="width: 1440px; display: flex; flex-direction: column; gap: 10px;">
+    <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #C9A981;">flow · add a skill node</div>
+    <h1 style="margin: 0; font-size: 38px; font-weight: 600; letter-spacing: -0.025em;">新增技能節點 — GitOps / ArgoCD</h1>
+    <p style="margin: 0; max-width: 720px; font-size: 14.5px; line-height: 1.7; color: #C0A483; text-wrap: pretty;">六個步驟，從打開 Edit mode 到送出 PR。範例是在 CI/CD 節點下長出一支新枝：GitOps / ArgoCD。每個技能在 repo 裡是一支 YAML 檔。</p>
+  </div>
+
+  <!-- ============ 01 ============ -->
+  <div data-screen-label="01" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">01</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">編輯模式待命</span>
+      <span style="font-size: 13.5px; color: #A5947F;">切開 Edit mode，每個節點右上角浮出「+」，點下去就從那裡長新枝。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.34) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">tree · build tier</span>
+          <span style="margin-left: auto; display: flex; align-items: center; gap: 9px; padding: 6px 12px 6px 8px; border-radius: 999px; border: 1px solid #3FB950; background: rgba(63,185,80,.14);">
+            <span style="width: 26px; height: 15px; border-radius: 999px; background: #3FB950; display: flex; align-items: center; justify-content: flex-end; padding: 2px;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #12210F; display: block;"></span></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #7EE787; letter-spacing: 0.08em;">EDIT MODE</span>
+          </span>
+          <span style="display: flex; align-items: center; gap: 7px; padding: 7px 13px; border-radius: 999px; border: 1px solid #8B5E34; background: #1C150E; font-size: 12.5px; font-weight: 600; color: #C9A981;"><span style="font-size: 14px; color: #3FB950;">+</span> Add Skill</span>
+        </div>
+
+        <div style="position: relative; height: 340px; border-radius: 12px; border: 1px dashed #4A3624; background: rgba(20,15,10,.35);">
+          <svg viewBox="0 0 1000 340" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+            <path d="M 400 240 C 400 175 180 175 180 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M 400 240 C 400 175 400 175 400 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+
+          <div style="position: absolute; left: 400px; top: 285px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; background-image: repeating-linear-gradient(112deg, rgba(139,94,52,.09) 0 1px, transparent 1px 5px); border: 1px solid #8B5E34; box-shadow: 0 0 0 1px rgba(139,94,52,.25), 0 12px 26px -14px #000; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38; box-shadow: 0 0 6px rgba(63,185,80,.5);"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">build</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #C9A981;">Lv.3</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em;">CI / CD</div>
+            <div style="height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); overflow: hidden;"><div style="height: 100%; width: 70%; background: #2A7A38;"></div></div>
+            <div style="position: absolute; top: -11px; right: -11px; width: 26px; height: 26px; border-radius: 50%; background: #3FB950; color: #0D1A0C; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 16px 2px rgba(63,185,80,.6);">+</div>
+          </div>
+
+          <div style="position: absolute; left: 180px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8B7050;">orchestrate</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #C9A981;">Lv.2</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em;">Terraform / Ansible</div>
+            <div style="height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); overflow: hidden;"><div style="height: 100%; width: 38%; background: #2A7A38;"></div></div>
+            <div style="position: absolute; top: -11px; right: -11px; width: 26px; height: 26px; border-radius: 50%; background: rgba(63,185,80,.18); border: 1px solid #3FB950; color: #7EE787; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;">+</div>
+          </div>
+
+          <div style="position: absolute; left: 400px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8B7050;">orchestrate</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #C9A981;">Lv.2</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600; letter-spacing: -0.01em;">AWS / 雲端</div>
+            <div style="height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); overflow: hidden;"><div style="height: 100%; width: 40%; background: #2A7A38;"></div></div>
+            <div style="position: absolute; top: -11px; right: -11px; width: 26px; height: 26px; border-radius: 50%; background: rgba(63,185,80,.18); border: 1px solid #3FB950; color: #7EE787; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;">+</div>
+          </div>
+
+          <div style="position: absolute; left: 700px; top: 110px; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 999px; border: 1px dashed #6B5238; background: rgba(28,21,14,.8); font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C0A483;">點任一「+」→ 從該節點長出新枝</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2E2116; border-radius: 16px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">edit mode</div>
+        <h3 style="margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;">選一個節點開始</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #A5947F; text-wrap: pretty;">編輯模式下，樹的外觀不變，只是每個節點多了一個「+」。前置技能會依你點的節點自動帶入。</p>
+        <div style="height: 1px; background: #2E2116;"></div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #3FB950; width: 16px;">1</span><span style="font-size: 13px; color: #C0A483;">點「+」或右上 Add Skill</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5C4C3A; width: 16px;">2</span><span style="font-size: 13px; color: #8E7D69;">填寫表單，樹上即時預覽</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5C4C3A; width: 16px;">3</span><span style="font-size: 13px; color: #8E7D69;">微調位置</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5C4C3A; width: 16px;">4</span><span style="font-size: 13px; color: #8E7D69;">確認 YAML diff</span></div>
+          <div style="display: flex; gap: 10px; align-items: baseline;"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5C4C3A; width: 16px;">5</span><span style="font-size: 13px; color: #8E7D69;">送出 PR</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 02 ============ -->
+  <div data-screen-label="02" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">02</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">表單填寫中 · 樹上即時預覽</span>
+      <span style="font-size: 13.5px; color: #A5947F;">右側面板從筆記清單切成表單。每打一個字，樹上的半透明節點同步更新。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.34) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">live preview</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #7EE787;">unsaved · 尚未送出</span>
+        </div>
+
+        <div style="position: relative; height: 340px; border-radius: 12px; border: 1px dashed #4A3624; background: rgba(20,15,10,.35);">
+          <svg viewBox="0 0 1000 340" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+            <path d="M 400 240 C 400 175 180 175 180 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M 400 240 C 400 175 400 175 400 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M 400 240 C 400 175 700 175 700 150" fill="none" stroke="#3FB950" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="7 6" opacity="0.85"></path>
+          </svg>
+
+          <div style="position: absolute; left: 400px; top: 285px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; background-image: repeating-linear-gradient(112deg, rgba(139,94,52,.09) 0 1px, transparent 1px 5px); border: 1px solid #8B5E34; box-shadow: 0 0 0 1px rgba(139,94,52,.25), 0 12px 26px -14px #000; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">build</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #C9A981;">Lv.3</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600;">CI / CD</div>
+            <div style="height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); overflow: hidden;"><div style="height: 100%; width: 70%; background: #2A7A38;"></div></div>
+            <div style="position: absolute; bottom: -9px; left: 50%; transform: translateX(-50%); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.1em; color: #7EE787; background: #16210F; border: 1px solid #2A7A38; border-radius: 4px; padding: 2px 6px; white-space: nowrap;">PARENT</div>
+          </div>
+
+          <div style="position: absolute; left: 180px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: 0.45; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8B7050;">orchestrate</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600;">Terraform / Ansible</div>
+          </div>
+
+          <div style="position: absolute; left: 400px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: 0.45; display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #8B7050;">orchestrate</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600;">AWS / 雲端</div>
+          </div>
+
+          <div style="position: absolute; left: 700px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: rgba(30,38,26,.55); border: 1.5px dashed #3FB950; box-shadow: 0 0 30px -6px rgba(63,185,80,.45); display: flex; flex-direction: column; gap: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #3FB950; box-shadow: 0 0 9px 1px rgba(63,185,80,.9);"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #7EE787;">orchestrate</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #7EE787;">Lv.1</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600; color: #EFE7DC;">GitOps / ArgoCD<span style="display: inline-block; width: 2px; height: 15px; background: #3FB950; margin-left: 2px; vertical-align: -2px; animation: caretBlink 1s steps(1) infinite;"></span></div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="flex: 1; height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(63,185,80,.35); overflow: hidden; display: block;"><span style="display: block; height: 100%; width: 20%; background: #3FB950; box-shadow: 0 0 8px rgba(63,185,80,.7);"></span></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7EE787;">new</span>
+            </div>
+            <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #0D1A0C; background: #3FB950; border-radius: 4px; padding: 3px 7px; white-space: nowrap;">PREVIEW</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2E2116; border-radius: 16px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); padding: 20px; display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">new skill</div>
+          <div style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid #3A2A1B; color: #9C8B78; display: flex; align-items: center; justify-content: center; font-size: 14px;">×</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">技能名稱</label>
+          <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3FB950; background: #14200F; font-size: 14px; color: #EFE7DC; display: flex; align-items: center;">GitOps / ArgoCD<span style="display: inline-block; width: 2px; height: 15px; background: #3FB950; margin-left: 2px; animation: caretBlink 1s steps(1) infinite;"></span></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">前置技能</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13.5px; color: #EFE7DC; display: flex; align-items: center; gap: 6px;">CI / CD <span style="margin-left: auto; color: #8B7050; font-size: 11px;">▾</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">層級 tier</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13.5px; color: #EFE7DC; display: flex; align-items: center; gap: 6px;">orchestrate <span style="margin-left: auto; color: #8B7050; font-size: 11px;">▾</span></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">初始 lv. / 進度</label>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #3FB950;">Lv.1 · 20%</span>
+          </div>
+          <div style="height: 6px; border-radius: 3px; background: #1B130D; border: 1px solid #3A2A1B; position: relative;">
+            <div style="height: 100%; width: 20%; background: #3FB950; border-radius: 3px;"></div>
+            <div style="position: absolute; left: 20%; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: #3FB950; box-shadow: 0 0 10px rgba(63,185,80,.8);"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">一句描述</label>
+          <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #C0A483; line-height: 1.6;">把 Git 當成唯一的真實來源，讓叢集狀態自己追上 repo。</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">技術標籤</label>
+          <div style="display: flex; gap: 7px; flex-wrap: wrap; padding: 9px 10px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 4px 8px; border-radius: 5px; background: #1E1610; border: 1px solid #3A2A1B; color: #C9A981;">argocd ×</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 4px 8px; border-radius: 5px; background: #1E1610; border: 1px solid #3A2A1B; color: #C9A981;">kustomize ×</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; padding: 4px 8px; color: #5C4C3A;">+ 新增</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">作品連結</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C0A483; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">homelab-k8s</div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">筆記路徑</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C0A483; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">notes/gitops/</div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 2px;">
+          <div style="flex: 1; text-align: center; padding: 11px; border-radius: 9px; border: 1px solid #3FB950; background: #163220; font-size: 13px; font-weight: 600; color: #7EE787;">下一步：調整位置 →</div>
+          <div style="padding: 11px 16px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #9C8B78;">取消</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 03 ============ -->
+  <div data-screen-label="03" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">03</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">拖拉微調位置</span>
+      <span style="font-size: 13.5px; color: #A5947F;">位置自動算好，不滿意可以直接拖。對齊輔助線會吸附同層節點。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.34) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 14px; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">dragging</span>
+          <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C0A483;">x 700 · y 110 &nbsp;|&nbsp; 已吸附同層基準線</span>
+        </div>
+
+        <div style="position: relative; height: 340px; border-radius: 12px; border: 1px dashed #4A3624; background: rgba(20,15,10,.35); overflow: hidden;">
+          <div style="position: absolute; left: 0; right: 0; top: 110px; height: 1px; background: repeating-linear-gradient(90deg, #3FB950 0 6px, transparent 6px 12px); opacity: .8;"></div>
+          <div style="position: absolute; top: 0; bottom: 0; left: 700px; width: 1px; background: repeating-linear-gradient(180deg, #3FB950 0 6px, transparent 6px 12px); opacity: .45;"></div>
+          <div style="position: absolute; left: 10px; top: 116px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #7EE787; letter-spacing: 0.1em;">TIER · ORCHESTRATE</div>
+
+          <svg viewBox="0 0 1000 340" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+            <path d="M 400 240 C 400 175 180 175 180 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M 400 240 C 400 175 400 175 400 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+            <path d="M 400 240 C 400 175 700 175 700 150" fill="none" stroke="#3FB950" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="7 6"></path>
+          </svg>
+
+          <div style="position: absolute; left: 400px; top: 285px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; border: 1px solid #8B5E34; opacity: .8; display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">build · Lv.3</span>
+            <div style="font-size: 15px; font-weight: 600;">CI / CD</div>
+          </div>
+          <div style="position: absolute; left: 180px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: .5;">
+            <div style="font-size: 15px; font-weight: 600;">Terraform / Ansible</div>
+          </div>
+          <div style="position: absolute; left: 400px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: .5;">
+            <div style="font-size: 15px; font-weight: 600;">AWS / 雲端</div>
+          </div>
+
+          <div style="position: absolute; left: 700px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: rgba(30,38,26,.75); border: 1.5px solid #3FB950; box-shadow: 0 18px 34px -14px #000, 0 0 34px -6px rgba(63,185,80,.55); display: flex; flex-direction: column; gap: 9px; cursor: grabbing;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="width: 9px; height: 9px; border-radius: 50%; background: #3FB950; box-shadow: 0 0 9px 1px rgba(63,185,80,.9);"></span>
+              <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #7EE787;">orchestrate</span>
+              <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #7EE787;">Lv.1</span>
+            </div>
+            <div style="font-size: 15px; font-weight: 600;">GitOps / ArgoCD</div>
+            <div style="display: flex; gap: 3px; justify-content: center; padding-top: 2px;">
+              <span style="width: 3px; height: 3px; border-radius: 50%; background: #3FB950;"></span>
+              <span style="width: 3px; height: 3px; border-radius: 50%; background: #3FB950;"></span>
+              <span style="width: 3px; height: 3px; border-radius: 50%; background: #3FB950;"></span>
+            </div>
+          </div>
+
+          <div style="position: absolute; left: 700px; top: 232px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 6px 11px; border-radius: 999px; background: #12210F; border: 1px solid #2A7A38; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #7EE787; white-space: nowrap;">snap · 與 AWS / 雲端 同層</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2E2116; border-radius: 16px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">position</div>
+        <h3 style="margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3;">位置只影響版面，<br />不影響技能關係</h3>
+        <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #A5947F; text-wrap: pretty;">前置技能決定連線，座標只是好看。拖到別的層級不會改變 tier，要改 tier 請回上一步。</p>
+        <div style="height: 1px; background: #2E2116;"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="border: 1px solid #3A2A1B; border-radius: 10px; padding: 12px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">x</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 600; margin-top: 3px;">700</div>
+          </div>
+          <div style="border: 1px solid #3A2A1B; border-radius: 10px; padding: 12px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">y</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 600; margin-top: 3px;">110</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 9px; padding: 10px 12px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B;">
+          <span style="width: 26px; height: 15px; border-radius: 999px; background: #3FB950; display: flex; align-items: center; justify-content: flex-end; padding: 2px; flex: none;"><span style="width: 11px; height: 11px; border-radius: 50%; background: #12210F; display: block;"></span></span>
+          <span style="font-size: 12.5px; color: #C0A483;">吸附到同層基準線</span>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: auto;">
+          <div style="flex: 1; text-align: center; padding: 11px; border-radius: 9px; border: 1px solid #3FB950; background: #163220; font-size: 13px; font-weight: 600; color: #7EE787;">下一步：看 diff →</div>
+          <div style="padding: 11px 16px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #9C8B78;">重設</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 04 ============ -->
+  <div data-screen-label="04" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">04</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">YAML diff 確認</span>
+      <span style="font-size: 13.5px; color: #A5947F;">送出前看清楚會進 repo 的是什麼。一個技能一支 YAML，加上索引檔的一行變更。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.28) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 12px; min-width: 0;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #EFE7DC;">2 files changed</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #3FB950;">+24</span>
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #E5484D;">−1</span>
+        </div>
+
+        <div style="border: 1px solid #3A2A1B; border-radius: 12px; overflow: hidden; background: #100C08;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #1A130D; border-bottom: 1px solid #3A2A1B;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C9A981;">skills/gitops-argocd.yaml</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 4px; background: #16210F; border: 1px solid #2A7A38; color: #7EE787;">new file</span>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.85; padding: 12px 0;">
+            <sc-for list="{{ diffNew }}" as="l" hint-placeholder-count="22">
+              <div style="display: flex; gap: 0; background: {{ l.bg }};">
+                <span style="width: 46px; flex: none; text-align: right; padding-right: 12px; color: #5C4C3A;">{{ l.n }}</span>
+                <span style="width: 18px; flex: none; color: {{ l.sc }};">{{ l.sign }}</span>
+                <span style="color: {{ l.tc }}; white-space: pre;">{{ l.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="border: 1px solid #3A2A1B; border-radius: 12px; overflow: hidden; background: #100C08;">
+          <div style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #1A130D; border-bottom: 1px solid #3A2A1B;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C9A981;">skills/cicd.yaml</span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 4px; background: #1E1610; border: 1px solid #4A3624; color: #C0A483;">modified</span>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; line-height: 1.85; padding: 12px 0;">
+            <sc-for list="{{ diffMod }}" as="l" hint-placeholder-count="6">
+              <div style="display: flex; gap: 0; background: {{ l.bg }};">
+                <span style="width: 46px; flex: none; text-align: right; padding-right: 12px; color: #5C4C3A;">{{ l.n }}</span>
+                <span style="width: 18px; flex: none; color: {{ l.sc }};">{{ l.sign }}</span>
+                <span style="color: {{ l.tc }}; white-space: pre;">{{ l.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2E2116; border-radius: 16px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); padding: 20px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">open pull request</div>
+        <div style="display: flex, flex-direction: column;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">pr title</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13.5px; color: #EFE7DC;">Add skill: GitOps / ArgoCD</div>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">branch</label>
+          <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C0A483;">skill/gitops-argocd → main</div>
+        </div>
+        <div style="height: 1px; background: #2E2116;"></div>
+        <div style="display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #C0A483;"><span style="color: #3FB950;">✓</span> YAML 語法檢查通過</div>
+          <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #C0A483;"><span style="color: #3FB950;">✓</span> 前置技能 cicd 存在</div>
+          <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #C0A483;"><span style="color: #3FB950;">✓</span> id 未重複</div>
+          <div style="display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: #C9A981;"><span style="color: #C9A981;">!</span> notes/gitops/ 目前是空的</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <div style="flex: 1; text-align: center; padding: 12px; border-radius: 9px; border: 1px solid #3FB950; background: #163220; font-size: 13px; font-weight: 600; color: #7EE787;">送出 Pull Request</div>
+          <div style="padding: 12px 16px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #9C8B78;">回上一步</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 05 ============ -->
+  <div data-screen-label="05" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">05</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">PR 已送出</span>
+      <span style="font-size: 13.5px; color: #A5947F;">新節點在樹上先以「pending」狀態顯示，PR 合併後才變成正式節點。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.34) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="position: relative; height: 340px; border-radius: 12px; border: 1px dashed #4A3624; background: rgba(20,15,10,.35);">
+        <svg viewBox="0 0 1000 340" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+          <path d="M 400 240 C 400 175 180 175 180 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+          <path d="M 400 240 C 400 175 400 175 400 150" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+          <path d="M 400 240 C 400 175 700 175 700 150" fill="none" stroke="#5B4028" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 7"></path>
+        </svg>
+        <div style="position: absolute; left: 400px; top: 285px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; border: 1px solid #8B5E34; opacity: .85;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">build · Lv.3</span>
+          <div style="font-size: 15px; font-weight: 600; margin-top: 7px;">CI / CD</div>
+        </div>
+        <div style="position: absolute; left: 180px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: .5;">
+          <div style="font-size: 15px; font-weight: 600;">Terraform / Ansible</div>
+        </div>
+        <div style="position: absolute; left: 400px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px solid #4E3722; opacity: .5;">
+          <div style="font-size: 15px; font-weight: 600;">AWS / 雲端</div>
+        </div>
+        <div style="position: absolute; left: 700px; top: 110px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px dashed #8B5E34; display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 9px; height: 9px; border-radius: 50%; background: #C9A981;"></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">pending pr</span>
+          </div>
+          <div style="font-size: 15px; font-weight: 600; color: #C0A483;">GitOps / ArgoCD</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #8B7050;">#128 · 等待合併</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2A7A38; border-radius: 16px; background: linear-gradient(180deg, #16210F 0%, #100C08 100%); padding: 22px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
+        <div style="width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid #3FB950; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 24px -4px rgba(63,185,80,.6);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#3FB950" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 L9.5 18 L20 6.5"></path></svg>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <h3 style="margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em;">Pull request 已開啟</h3>
+          <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #A5947F; text-wrap: pretty;">合併之後這個節點就會正式長在樹上。在那之前它以虛線顯示，不計入 Lv. 總和。</p>
+        </div>
+        <div style="border: 1px solid #2E2116; border-radius: 10px; padding: 13px; display: flex; flex-direction: column; gap: 7px; background: #140F0A;">
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #3FB950;">#128</span>
+            <span style="font-size: 13.5px; font-weight: 600;">Add skill: GitOps / ArgoCD</span>
+          </div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #8B7050;">skill/gitops-argocd → main · 2 files · +24 −1</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <div style="flex: 1; text-align: center; padding: 11px; border-radius: 9px; border: 1px solid #3FB950; background: #163220; font-size: 13px; font-weight: 600; color: #7EE787;">在 GitHub 打開 ↗</div>
+          <div style="padding: 11px 16px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #9C8B78;">再加一個</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 06 ============ -->
+  <div data-screen-label="06" style="width: 1440px; display: flex; flex-direction: column; gap: 14px;">
+    <div style="display: flex; align-items: baseline; gap: 14px;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: #3FB950; letter-spacing: 0.1em;">06</span>
+      <span style="font-size: 19px; font-weight: 600; letter-spacing: -0.01em;">編輯現有節點</span>
+      <span style="font-size: 13.5px; color: #A5947F;">同一張表單。刪除放在最下面，要二次確認，並且會提醒下游節點會被牽動。</span>
+    </div>
+
+    <div style="border: 1px solid #4A3624; border-radius: 18px; background: linear-gradient(180deg, rgba(37,58,38,.34) 0%, rgba(52,38,25,.42) 100%); padding: 20px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px;">
+      <div style="position: relative; height: 400px; border-radius: 12px; border: 1px dashed #4A3624; background: rgba(20,15,10,.35);">
+        <svg viewBox="0 0 1000 400" style="position: absolute; inset: 0; width: 100%; height: 100%;">
+          <path d="M 300 300 C 300 235 300 235 300 210" fill="none" stroke="#8B5E34" stroke-width="2.2" stroke-linecap="round"></path>
+          <path d="M 300 130 C 300 95 560 95 560 80" fill="none" stroke="#E5484D" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 6" opacity=".8"></path>
+        </svg>
+
+        <div style="position: absolute; left: 300px; top: 340px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; border: 1px solid #8B5E34; opacity: .85;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">build · Lv.4</span>
+          <div style="font-size: 15px; font-weight: 600; margin-top: 7px;">Docker / 容器</div>
+        </div>
+
+        <div style="position: absolute; left: 300px; top: 170px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #241A11; background-image: repeating-linear-gradient(112deg, rgba(139,94,52,.09) 0 1px, transparent 1px 5px); border: 1.5px solid #C9A981; box-shadow: 0 0 0 3px rgba(201,169,129,.15), 0 14px 28px -14px #000; display: flex; flex-direction: column; gap: 9px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="width: 9px; height: 9px; border-radius: 50%; background: #2A7A38;"></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A981;">orchestrate</span>
+            <span style="margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #C9A981;">Lv.2</span>
+          </div>
+          <div style="font-size: 15px; font-weight: 600;">Kubernetes</div>
+          <div style="height: 4px; border-radius: 2px; background: #1B130D; border: 1px solid rgba(139,94,52,.3); overflow: hidden;"><div style="height: 100%; width: 42%; background: #2A7A38;"></div></div>
+          <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: #241A11; background: #C9A981; border-radius: 4px; padding: 3px 7px; white-space: nowrap;">EDITING</div>
+        </div>
+
+        <div style="position: absolute; left: 560px; top: 80px; transform: translate(-50%, -50%); width: 176px; border-radius: 12px; padding: 12px 13px; background-color: #1C150E; border: 1px dashed #E5484D; display: flex; flex-direction: column; gap: 7px;">
+          <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #E5484D;">會被孤立</span>
+          <div style="font-size: 15px; font-weight: 600; color: #C0A483;">監控 &amp; 可觀測性</div>
+        </div>
+
+        <div style="position: absolute; left: 660px; top: 240px; width: 260px; padding: 13px 14px; border-radius: 10px; border: 1px solid #4A3624; background: rgba(20,15,10,.9); display: flex; flex-direction: column; gap: 6px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #C9A981;">downstream</div>
+          <div style="font-size: 12.5px; line-height: 1.6; color: #A5947F;">刪掉 Kubernetes 會讓 1 個下游節點失去前置技能，需要先改接到別的節點。</div>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #2E2116; border-radius: 16px; background: linear-gradient(180deg, #1A130D 0%, #100C08 100%); padding: 20px; display: flex; flex-direction: column; gap: 14px; align-self: start;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9A981;">edit skill</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #8B7050;">skills/kubernetes.yaml</div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">技能名稱</label>
+          <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 14px; color: #EFE7DC;">Kubernetes</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">前置技能</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13.5px; color: #EFE7DC; display: flex;">Docker <span style="margin-left: auto; color: #8B7050; font-size: 11px;">▾</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">層級 tier</label>
+            <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13.5px; color: #EFE7DC; display: flex;">orchestrate <span style="margin-left: auto; color: #8B7050; font-size: 11px;">▾</span></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">lv. / 進度</label>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #C9A981;">Lv.2 → Lv.3 · 42% → 58%</span>
+          </div>
+          <div style="height: 6px; border-radius: 3px; background: #1B130D; border: 1px solid #3A2A1B; position: relative;">
+            <div style="height: 100%; width: 42%; background: #4A3624; border-radius: 3px;"></div>
+            <div style="position: absolute; left: 0; top: 0; height: 100%; width: 58%; background: linear-gradient(90deg, transparent 0 42%, #3FB950 42% 100%); border-radius: 3px;"></div>
+            <div style="position: absolute; left: 58%; top: 50%; transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: #3FB950; box-shadow: 0 0 10px rgba(63,185,80,.8);"></div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <label style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B7050;">筆記路徑</label>
+          <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid #3A2A1B; background: #16100B; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C0A483;">notes/kubernetes/ · 3 篇</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 2px;">
+          <div style="flex: 1; text-align: center; padding: 11px; border-radius: 9px; border: 1px solid #3FB950; background: #163220; font-size: 13px; font-weight: 600; color: #7EE787;">儲存並開 PR</div>
+          <div style="padding: 11px 16px; border-radius: 9px; border: 1px solid #3A2A1B; background: #16100B; font-size: 13px; color: #9C8B78;">取消</div>
+        </div>
+
+        <div style="height: 1px; background: #2E2116; margin-top: 4px;"></div>
+
+        <div style="border: 1px solid rgba(229,72,77,.4); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px; background: rgba(229,72,77,.06);">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #E5484D;">danger zone</div>
+          <div style="font-size: 12.5px; line-height: 1.65; color: #C0A483;">刪除這個節點。1 個下游節點會失去前置技能，筆記檔案不會被刪除。</div>
+          <div style="display: flex; align-items: center; gap: 9px;">
+            <span style="width: 15px; height: 15px; border-radius: 4px; border: 1px solid #E5484D; flex: none;"></span>
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #C0A483;">我了解影響範圍</span>
+          </div>
+          <div style="text-align: center; padding: 10px; border-radius: 8px; border: 1px solid rgba(229,72,77,.35); font-size: 12.5px; font-weight: 600; color: rgba(229,72,77,.55);">刪除 Kubernetes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1540,&quot;height&quot;:1100}}">
+const NEW_FILE = [
+  "id: gitops-argocd",
+  "name: GitOps / ArgoCD",
+  "tier: orchestrate",
+  "parent: cicd",
+  "level: 1",
+  "progress: 20",
+  "blurb: >-",
+  "  把 Git 當成唯一的真實來源，",
+  "  讓叢集狀態自己追上 repo。",
+  "tags:",
+  "  - argocd",
+  "  - kustomize",
+  "position:",
+  "  x: 700",
+  "  y: 110",
+  "notes_dir: notes/gitops/",
+  "works:",
+  "  - repo: homelab-k8s",
+  "    kind: repo",
+  "created: 2026-08-20"
+];
+
+const MOD_FILE = [
+  { sign: " ", text: "tier: build" },
+  { sign: " ", text: "children:" },
+  { sign: " ", text: "  - terraform-ansible" },
+  { sign: "-", text: "  - aws-cloud" },
+  { sign: "+", text: "  - aws-cloud" },
+  { sign: "+", text: "  - gitops-argocd" },
+  { sign: " ", text: "notes_dir: notes/cicd/" }
+];
+
+class Component extends DCLogic {
+  line(sign, text, n) {
+    const add = sign === "+", del = sign === "-";
+    return {
+      sign, text, n,
+      bg: add ? "rgba(63,185,80,.10)" : del ? "rgba(229,72,77,.10)" : "transparent",
+      sc: add ? "#3FB950" : del ? "#E5484D" : "#5C4C3A",
+      tc: add ? "#B8E6BF" : del ? "#E8B3B5" : "#C0A483"
+    };
+  }
+
+  renderVals() {
+    return {
+      diffNew: NEW_FILE.map((t, i) => this.line("+", t, i + 1)),
+      diffMod: MOD_FILE.map((l, i) => this.line(l.sign, l.text, 12 + i))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

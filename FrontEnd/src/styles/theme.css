@@ -1,0 +1,140 @@
+:root {
+  --bg: #322418;
+  --bg-page: radial-gradient(900px 560px at 22% 8%, rgba(63, 185, 80, 0.14) 0%, transparent 70%),
+    radial-gradient(760px 520px at 88% 26%, rgba(63, 185, 80, 0.1) 0%, transparent 72%),
+    radial-gradient(1300px 760px at 50% 100%, #5c4430 0%, #40301f 52%, #322418 100%);
+
+  --wood: #8b5e34;
+  --wood-dim: #5b4028;
+  --wood-faint: #4a3624;
+  --wood-line: #3a2a1b;
+
+  --green: #3fb950;
+  --green-soft: #2a7a38;
+  --green-bright: #7ee787;
+  --danger: #e5484d;
+
+  --text: #efe7dc;
+  --text-muted: #a5947f;
+  --text-dim: #c0a483;
+  --label: #c9a981;
+
+  --panel: linear-gradient(180deg, #1a130d 0%, #100c08 100%);
+  --card: #1c150e;
+  --card-strong: #241a11;
+  --card-idle: #140f0a;
+
+  --font-sans: 'Space Grotesk', Helvetica, Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --wood-grain: repeating-linear-gradient(112deg, rgba(139, 94, 52, 0.09) 0 1px, transparent 1px 5px),
+    repeating-linear-gradient(112deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 11px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--green);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--green-bright);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field > label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8b7050;
+}
+.field input,
+.field select,
+.field textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--wood-line);
+  background: #16100b;
+  color: var(--text);
+  font: inherit;
+  font-size: 13.5px;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--green);
+  background: #14200f;
+}
+.field .error {
+  font-size: 11.5px;
+  color: var(--danger);
+}
+
+.btn-primary {
+  padding: 11px 16px;
+  border-radius: 9px;
+  border: 1px solid var(--green);
+  background: #163220;
+  color: var(--green-bright);
+  font-size: 13px;
+  font-weight: 600;
+}
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-ghost {
+  padding: 11px 16px;
+  border-radius: 9px;
+  border: 1px solid var(--wood-line);
+  background: #16100b;
+  color: #9c8b78;
+  font-size: 13px;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--wood-line);
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #140f0a;
+}
