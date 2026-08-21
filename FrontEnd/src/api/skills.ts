@@ -1,24 +1,24 @@
 /**
- * fetchSkills 已經接上真的後端（GET /api/skills）。
+ * getSkills 已經接上真的後端（GET /api/skills）。
  * 其他函式後端還沒寫好，繼續回假資料；要接真後端時把對應那行 mock 刪掉，並打開下面註解掉的 request(...)。
+ * 命名跟後端 controller action 對齊（Get 開頭），不要用 fetch 前綴。
  */
 import { request } from './client'
 import type { DiffPreview, Note, PullRequest, Skill, SkillDraft } from '@/types/skill'
-import { MOCK_NOTES, MOCK_SKILLS, delay, mockDiff, mockPullRequest, mockRecentNotes } from './mock'
+import { MOCK_SKILLS, delay, mockDiff, mockPullRequest, mockRecentNotes } from './mock'
 
 /** GET /api/skills — 整棵樹 */
-export function fetchSkills(_signal?: AbortSignal): Promise<Skill[]> {
+export function getSkills(_signal?: AbortSignal): Promise<Skill[]> {
   return request<Skill[]>('/skills', { signal: _signal })
 }
 
 /** GET /api/skills/:slug/notes — 某個技能底下的筆記 */
-export function fetchNotes(skillSlug: string, _signal?: AbortSignal): Promise<Note[]> {
-  // return request<Note[]>(`/skills/${encodeURIComponent(skillSlug)}/notes`, { signal: _signal })
-  return delay(MOCK_NOTES[skillSlug] ?? [], 180)
+export function getSkillNotes(skillSlug: string, _signal?: AbortSignal): Promise<Note[]> {
+  return request<Note[]>(`/skills/${encodeURIComponent(skillSlug)}/notes`, { signal: _signal })
 }
 
 /** GET /api/notes/recent?limit=7 — 首頁「最新筆記」 */
-export function fetchRecentNotes(
+export function getRecentNotes(
   limit = 7,
 ): Promise<(Note & { skillSlug: string; skillName: string })[]> {
   // return request(`/notes/recent?limit=${limit}`)

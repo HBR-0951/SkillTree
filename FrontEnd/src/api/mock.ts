@@ -17,7 +17,7 @@ export function delay<T>(value: T, ms = 260): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms))
 }
 
-type NoteSeed = [date: string, title: string, excerpt: string]
+type NoteSeed = [date: string, title: string, summary: string]
 
 interface SkillSeed {
   /** mock 用：當作 Skill.slug，以及 notesDir/notes 內部查表的 key。Skill.id 另外用陣列 index 產生假數字。 */
@@ -281,10 +281,10 @@ export const MOCK_SKILLS: Skill[] = SEEDS.map((seed, index) => ({
 export const MOCK_NOTES: Record<string, Note[]> = Object.fromEntries(
   SEEDS.map((seed) => [
     seed.id,
-    seed.notes.map(([date, title, excerpt], i) => ({
+    seed.notes.map(([date, title, summary], i) => ({
       slug: slugify(seed.id, i),
       title,
-      excerpt,
+      summary,
       date,
       tags: seed.tags.slice(0, 2),
     })),
@@ -292,13 +292,13 @@ export const MOCK_NOTES: Record<string, Note[]> = Object.fromEntries(
 )
 
 const FLAT_NOTES = SEEDS.flatMap((seed) =>
-  seed.notes.map(([date, title, excerpt], i) => ({
+  seed.notes.map(([date, title, summary], i) => ({
     skillSlug: seed.id,
     skillName: seed.name,
     note: {
       slug: slugify(seed.id, i),
       title,
-      excerpt,
+      summary,
       date,
       tags: seed.tags.slice(0, 2),
     } satisfies Note,
@@ -334,9 +334,9 @@ const FULL_BODY = `
 <p>大部分情況不需要看程式碼，Events 加上前一個容器的 log 就夠了。真正花時間的是沒有照順序看。</p>
 `.trim()
 
-function genericBody(title: string, excerpt: string) {
+function genericBody(title: string, summary: string) {
   return `
-<p>${excerpt}</p>
+<p>${summary}</p>
 <h2 id="context">為什麼記這篇</h2>
 <p>這篇是「${title}」的筆記。內文之後由後端從 <code>notes/</code> 底下的 markdown 渲染後回傳，目前顯示的是假資料。</p>
 <h2 id="notes">重點</h2>
@@ -363,7 +363,7 @@ export function mockNoteDetail(slug: string): NoteDetail {
     ...entry.note,
     skillSlug: entry.skillSlug,
     skillName: entry.skillName,
-    contentHtml: isFull ? FULL_BODY : genericBody(entry.note.title, entry.note.excerpt),
+    contentHtml: isFull ? FULL_BODY : genericBody(entry.note.title, entry.note.summary),
     headings: isFull
       ? [
           { id: 'check-order', text: '固定的排查順序', level: 2 },
@@ -380,7 +380,6 @@ export function mockNoteDetail(slug: string): NoteDetail {
     updated: null,
     prev: prev ? { slug: prev.note.slug, title: prev.note.title } : null,
     next: next ? { slug: next.note.slug, title: next.note.title } : null,
-    sourcePath: `notes/${entry.skillSlug}/${slug}.md`,
   }
 }
 

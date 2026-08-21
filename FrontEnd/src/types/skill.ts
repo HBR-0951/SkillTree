@@ -7,7 +7,7 @@ export const TIERS: readonly Tier[] = ['foundation', 'build', 'orchestrate', 'op
 export interface Note {
   slug: string
   title: string
-  excerpt: string
+  summary: string
   /** ISO 8601, e.g. 2026-08-14 */
   date: string
   tags: string[]
@@ -29,7 +29,6 @@ export interface NoteDetail extends Note {
   updated: string | null
   prev: NoteRef | null
   next: NoteRef | null
-  sourcePath: string
 }
 
 export interface Work {

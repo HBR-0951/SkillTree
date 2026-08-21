@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { fetchNote } from '@/api/notes'
+import { getNote } from '@/api/notes'
 import type { NoteDetail } from '@/types/skill'
 
 const props = defineProps<{ slug: string }>()
@@ -16,7 +16,7 @@ watch(
     error.value = null
     note.value = null
     try {
-      note.value = await fetchNote(slug)
+      note.value = await getNote(slug)
     } catch (e) {
       error.value = e instanceof Error ? e.message : '讀取筆記失敗'
     } finally {
@@ -54,7 +54,6 @@ function formatDate(iso: string) {
         <div class="meta mono">
           <span>{{ formatDate(note.date) }}</span>
           <span v-if="note.updated" class="dim">updated {{ formatDate(note.updated) }}</span>
-          <span class="dim">{{ note.sourcePath }}</span>
         </div>
 
         <ul v-if="note.tags.length" class="tags">

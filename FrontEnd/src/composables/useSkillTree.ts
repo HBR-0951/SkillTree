@@ -1,5 +1,5 @@
 import { computed, onMounted, ref, shallowRef } from 'vue'
-import { fetchNotes, fetchSkills } from '@/api/skills'
+import { getSkillNotes, getSkills } from '@/api/skills'
 import { buildEdges, layout } from '@/lib/layout'
 import type { Note, Skill } from '@/types/skill'
 
@@ -26,7 +26,7 @@ export function useSkillTree() {
     loading.value = true
     error.value = null
     try {
-      skills.value = await fetchSkills()
+      skills.value = await getSkills()
     } catch (e) {
       error.value = e instanceof Error ? e.message : '讀取技能樹失敗'
     } finally {
@@ -40,7 +40,7 @@ export function useSkillTree() {
     if (!slug) return
     notesLoading.value = true
     try {
-      notes.value = await fetchNotes(slug)
+      notes.value = await getSkillNotes(slug)
     } catch (e) {
       error.value = e instanceof Error ? e.message : '讀取筆記失敗'
     } finally {

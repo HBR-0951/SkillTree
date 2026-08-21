@@ -52,7 +52,7 @@ const emit = defineEmits<{ close: []; edit: [slug: string] }>()
             <span class="mono date">{{ note.date.slice(5) }}</span>
             <span class="note-title">{{ note.title }}</span>
           </span>
-          <span class="excerpt">{{ note.excerpt }}</span>
+          <span class="excerpt">{{ note.summary }}</span>
         </RouterLink>
       </li>
     </ul>
